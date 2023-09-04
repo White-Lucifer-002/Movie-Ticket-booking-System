@@ -23,7 +23,7 @@ def connect_db(user, password, db_name, collection_name):
     return collection
 
 
-app = Flask(__name__, template_folder="Interface/templates")
+app = Flask("Movie Booking", template_folder="Client/templates/", static_folder="Client/static/")
 cors = CORS(app)
 bcrypt = Bcrypt(app)
 logger = logging
@@ -39,8 +39,16 @@ users_collection = connect_db(user, password, db_name, "users")
 movies_collection = connect_db(user, password, db_name, "movies")
 
 
-@app.route("/register", methods=["POST"])
-def register():
+@app.route("/")
+def homepage():
+    return render_template("login.html")
+
+
+@app.route("/register/<function>", methods=["POST"])
+def register(function):
+    if function == "registerPage":
+        return render_template("register.html")
+
     # Get user data from the request
     data = request.get_json()
     email = data["email"]
@@ -67,10 +75,13 @@ def register():
     return jsonify({"message": "User registered successfully", "code":201}), 201
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/login/<function>", methods=["GET","POST"])
 # @cross_origin(origin='*')
-def login():
+def login(function):
     # Get user data from the request
+    if function == "loginPage":
+        return render_template("login.html")
+
     data = request.get_json()
     email = data["email"]
     password = data["password"]
@@ -78,7 +89,7 @@ def login():
     # Find the user by email
     user = users_collection.find_one({"email": email})
     if not user:
-        return jsonify({"message": "User not found", "error_code":404})
+        return jsonify({"message": "User not found!! Please register..", "code":404})
 
     # Check the password
     if bcrypt.check_password_hash(user["password"], password):
@@ -86,26 +97,27 @@ def login():
         change = { "$set": {"in_session": True}}
         users_collection.update_one(query, change)
         logger.debug("Login successful")
-        return jsonify({"message": "Login successful", "error_code":200}), 200
+        return jsonify({"message": "Login successful", "code":200}), 200
     else:
-        return jsonify({"message": "Invalid password", "error_code":401}), 401
+        return jsonify({"message": "Invalid password", "code":401}), 401
 
 
-@app.route("/login/movies", methods=["GET"])
-def get_movies():
+@app.route("/login/movies/<function>", methods=["GET"])
+def get_movies(function):
+    if function == "moviePage":
+        return render_template("browsing_movies.html")
+    
     # Get user data from the request
-    data = request.get_json()
-    email = data["email"]
-    user = users_collection.find_one({"email": email})
+    # user = users_collection.find_one({"email": email})
 
-    if user and user["in_session"]:
+    # if user and user["in_session"]:
         # Retrieve movies from the database
-        movies = list(movies_collection.find({}, {"_id": 0}))
-        return jsonify({"movies": movies})
-    else:
-        return redirect("login.html")
-
+    
+    movies = list(movies_collection.find({}, {"_id": 0}))
+    return jsonify({"movies": movies})
+    # else:
+    #     return redirect("login.html")
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False, port=3000)
+    app.run(debug=True, port=3000)

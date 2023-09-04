@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="../CSS_JS/styles.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='CSS/log_reg_styles.css') }}">
 </head>
 
 <body>
@@ -22,9 +22,9 @@
         
         </form>
 
-        <p>Don't have an account? <a href="register.html">Register here</a></p>
+        <p>Don't have an account? <a href="http://127.0.0.1:3000/register/registerPage">Register here</a></p>
     </div>
 
-    <script src="../CSS_JS/login_register_validate.js"></script>
+    <script src="{{url_for('static',filename='JS/login_register_validate.js') }}"></script>
 </body>
 </html>

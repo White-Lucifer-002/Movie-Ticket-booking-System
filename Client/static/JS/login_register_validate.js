@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault();
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
-            const url = "http://127.0.0.1:3000/login"
+            const url = "http://127.0.0.1:3000/login/"
 
-            const response = await fetch(url, {
+            const response = await fetch(url + "validate", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -19,8 +19,14 @@ document.addEventListener("DOMContentLoaded", function() {
             });
 
             const data = await response.json();
-            alert(data.message);
-            loginForm.reset();
+            alert(data.message);            
+
+            if(data.code == 200){
+                location.assign(url + "movies/moviePage");
+            }
+            else{
+                loginForm.reset();
+            }
         });
     }
 
@@ -30,9 +36,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const name = document.getElementById("name").value;
-            const url = "http://127.0.0.1:3000/register"
+            const url = "http://127.0.0.1:3000/register/"
 
-            const response = await fetch(url, {
+            const response = await fetch(url + "entry", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const data = await response.json();
             alert(data.message);
-            location.replace("../templates/login.html")
+            location.replace(url + "login/loginPage")
             // registrationForm.reset();
         });
     }
