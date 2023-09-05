@@ -1,7 +1,5 @@
 body {
-    margin: 0;
-    padding: 0;
-    background-color: black;
+    font-family: Arial, sans-serif;
 }
 
 .wrapper {
@@ -30,31 +28,27 @@ nav {
     font-weight: bold;
 }
 
-.search-bar {
-    display: flex;
-    align-items: center;
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
 }
 
-input[type="text"] {
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    margin-right: 10px;
+h1 {
+    color: #007bff;
 }
 
-.search_btn {
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 20px;
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px;
     cursor: pointer;
-}
-
-.search_btn:hover{
-    background-color:slateblue;
-    transition: ease;
-    transition-delay: 0.2s;
+    font-weight: bold;
+    color: #007bff;
 }
 
 .user-icon {
@@ -94,31 +88,13 @@ input[type="text"] {
     color:blue;
 }
 
-.movie-list {
-    display:flex;
-    flex-wrap: wrap;
+#showtimes {
+    margin-top: 20px;
 }
 
-.movie-tile {
-    background-color: #f4f4f4;
+.showtime-tile{
     border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
+    padding: 10px;
     margin: 10px;
-    width: calc(33.33% - 20px);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-}
-
-.movie-tile:hover{
-    border: 1px solid ;
-    border-color:black;
-    transition:ease;
-    transition: 0.4s;
-}
-
-@media (max-width: 768px) {
-    .movie-tile {
-        width: calc(50% - 20px);
-    }
+    background-color: #f4f4f4;
 }

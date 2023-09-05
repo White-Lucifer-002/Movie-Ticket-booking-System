@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, session
 from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 from flask_bcrypt import Bcrypt
 import json
 import sys
 import logging
+from datetime import datetime 
 
 def connect_db(user, password, db_name, collection_name):
     #connecting to mongodb
@@ -24,9 +25,10 @@ def connect_db(user, password, db_name, collection_name):
 
 
 app = Flask("Movie Booking", template_folder="Client/templates/", static_folder="Client/static/")
+app.secret_key = '12345@RAM!'
 cors = CORS(app)
 bcrypt = Bcrypt(app)
-logger = logging
+
 
 #creds for accessing mongo db
 creds_file = open("Client/mongodb_creds.json")
@@ -66,7 +68,8 @@ def register(function):
     new_user = {
         "email": email,
         "password": hashed_password,
-        "in_session": False
+        "lastLogin": "",
+        "accountCreatedAt": datetime.now()
     }
 
     # Insert the user into the database
@@ -82,6 +85,9 @@ def login(function):
     if function == "loginPage":
         return render_template("login.html")
 
+    if "currentMovies" in session.keys():
+        session.pop("currentMovies", None)
+
     data = request.get_json()
     email = data["email"]
     password = data["password"]
@@ -94,9 +100,10 @@ def login(function):
     # Check the password
     if bcrypt.check_password_hash(user["password"], password):
         query = {"email": email}
-        change = { "$set": {"in_session": True}}
+        change = { "$set": {"lastLogin": datetime.now()}}
         users_collection.update_one(query, change)
-        logger.debug("Login successful")
+
+        session["user_email"] = user["email"]
         return jsonify({"message": "Login successful", "code":200}), 200
     else:
         return jsonify({"message": "Invalid password", "code":401}), 401
@@ -112,11 +119,32 @@ def get_movies(function):
 
     # if user and user["in_session"]:
         # Retrieve movies from the database
-    
+    if "currentMovies" in session.keys():
+        session.pop("currentMovies", None)
+        
     movies = list(movies_collection.find({}, {"_id": 0}))
-    return jsonify({"movies": movies})
+    return jsonify({"movies": movies, "user": session.get("user_email")})
     # else:
     #     return redirect("login.html")
+
+@app.route("/login/movies/timeslot", methods=["GET", "POST"])
+def get_timeslot():
+    # Get user data from the request
+    if request.method == "POST":
+        data = request.get_json()
+        session["currentMovie"] = data
+        print(session)
+        return render_template("timeslot.html")
+
+    elif request.method == "GET":
+        data = session.get("currentMovie")
+        return data
+
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.pop('user_email', None)
+    return render_template("login.html")
 
 
 if __name__ == "__main__":

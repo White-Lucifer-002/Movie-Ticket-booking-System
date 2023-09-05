@@ -3,6 +3,22 @@
 let movieData = []
 const url = "http://127.0.0.1:3000/login/"
 
+
+async function slot_timing(movie) {
+    const response = await fetch(url + "movies/timeslot", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(movie)
+    });
+
+    if(response.status != 200){
+        console.log(response.status);
+    }
+}
+
+
 //Display the movie details by default
 document.addEventListener("DOMContentLoaded", async function() {
     // const email = document.getElementById("email").value;
@@ -15,15 +31,21 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
 
     movieData = await response.json();
-    movieData = movieData.movies
+    let user = movieData.user;
+    movieData = movieData.movies;
     console.log(movieData);
+    console.log(user);
 
     const movieList = document.querySelector(".movie-list");
+    const userDetails = document.getElementById("user_details");
+
     movieData.forEach((movie) => {
         const movieTile = document.createElement("div");
         movieTile.classList.add("movie-tile");
-        movieTile.onclick="";
-        
+        movieTile.onclick = function(){
+            slot_timing(movie);
+        };
+
         console.log(movie);
         movieTile.innerHTML = `
             <h2>${movie.movieName}</h2>
@@ -34,6 +56,13 @@ document.addEventListener("DOMContentLoaded", async function() {
         movieList.appendChild(movieTile);
     });
 
+    //Loading user details
+    userDetails.innerHTML = `
+        <h3>User</h3>
+        <br>
+        <p>${String(user)}</p>
+        <br>
+    `
 });
 
 // User icon click event to show/hide user popup
@@ -63,6 +92,10 @@ searchButton.addEventListener("click", function() {
             
             const movieTile = document.createElement("div");
             movieTile.classList.add("movie-tile");
+            movieTile.onclick = function(){
+                slot_timing(movie);
+            };
+
             console.log(movie);
             movieTile.innerHTML = `
                 <h2>${movie.movieName}</h2>
@@ -102,5 +135,5 @@ document.addEventListener("click", (event) => {
 logoutButton.addEventListener("click", function () {
     userPopup.style.display = "none";
     // Add logout logic here
-    location.assign(url + "loginPage");
+    location.assign(url.replace("login/", "") + "logout");
 });
