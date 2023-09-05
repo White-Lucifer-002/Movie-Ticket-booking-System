@@ -19,6 +19,59 @@ header {
     
 }
 
+h1 {
+    color: #007bff;
+}
+
+/* Center the container div both horizontally and vertically */
+.box {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 110vh;
+}
+
+/* Style the moving text */
+.moving-text {
+    font-size: 24px;
+    background-color: #3498db; /* Background color for the box */
+    color: #fff; /* Text color */
+    padding: 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(81, 64, 233, 0.7);
+
+    animation: moveText 3s linear infinite; /* Apply the animation */
+    color:brown;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+/* Define the animation keyframes */
+@keyframes moveText {
+    0% {
+        transform: translateX(0); /* Start from the initial position */
+    }
+    50% {
+        transform: translateX(50px); /* Move the text 50px to the right */
+    }
+    100% {
+        transform: translateX(0); /* Return to the initial position */
+    }
+}
+
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #007bff;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
@@ -115,6 +168,17 @@ input[type="text"] {
     border-color:black;
     transition:ease;
     transition: 0.4s;
+}
+
+#showtimes {
+    margin-top: 20px;
+}
+
+.showtime-tile{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    background-color: #f4f4f4;
 }
 
 @media (max-width: 768px) {

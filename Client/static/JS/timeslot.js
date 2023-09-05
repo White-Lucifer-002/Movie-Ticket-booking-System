@@ -6,11 +6,18 @@ function select_seats(selectedMovie, showTime){
 
 // Function to display showtimes for a selected movie
 function displayShowtimes(selectedMovie) {
-    const showtimesContainer = document.getElementById('container');
+    const showtimesContainer = document.getElementById('showtimes');
+    console.log("Movie:", selectedMovie)
 
     if (selectedMovie) {
         const showtimes = selectedMovie["showTime"].split(", ")        
-        
+
+        showtimesContainer.innerHTML = `
+            <div class="box">
+                <p class="moving-text">${selectedMovie["movieName"]}</p>
+            </div>
+        `;
+
         showtimes.forEach((showtime) => {
             const showtimeTile = document.createElement("div");
             showtimeTile.classList.add("showtime-tile");
@@ -31,15 +38,54 @@ function displayShowtimes(selectedMovie) {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-    const response = await fetch(url + "movies/timeslot", {
+    const response = await fetch(url + "movies/timeslot?function=fetch", {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
     });
 
-    const movie = await response.json();
+    const resp = await response.json();
+    let user = resp["user"];
+    delete resp["user"]
+
+    const movie = resp;
 
     // Populate the movie list on page load
     displayShowtimes(movie);
+
+    //Loading user details
+    const userDetails = document.getElementById("user_details");
+    userDetails.innerHTML = `
+        <h3>User</h3>
+        <br>
+        <p>${String(user)}</p>
+        <br>
+    `
+});
+
+
+// User icon click event to show/hide user popup
+const userIcon = document.getElementById("userIcon");
+const userPopup = document.getElementById("userPopup");
+
+//search and logout buttons
+const logoutButton = document.getElementById("logoutButton");
+
+userIcon.addEventListener("click", () => {
+    userPopup.style.display = userPopup.style.display === "block" ? "none" : "block";
+});
+
+// Close user popup when clicking outside of it
+document.addEventListener("click", (event) => {
+    if (event.target !== userIcon && event.target !== userPopup) {
+        userPopup.style.display = "none";
+    }
+});
+
+// Close user popup when the logout button is clicked
+logoutButton.addEventListener("click", function () {
+    userPopup.style.display = "none";
+    // Add logout logic here
+    location.assign(url.replace("login/", "") + "logout");
 });

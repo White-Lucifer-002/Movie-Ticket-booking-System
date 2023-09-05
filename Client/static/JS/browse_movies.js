@@ -4,7 +4,7 @@ let movieData = []
 const url = "http://127.0.0.1:3000/login/"
 
 async function slot_timing(movie) {
-    const response = await fetch(url + "movies/timeslot", {
+    const response = await fetch(url + "movies/timeslot?function=fetch", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -12,9 +12,7 @@ async function slot_timing(movie) {
         body: JSON.stringify(movie)
     });
 
-    if(response.status != 200){
-        console.log(response.status);
-    }
+    location.assign(url + "movies/timeslot?function=timeslotPage");
 }
 
 
@@ -22,7 +20,7 @@ async function slot_timing(movie) {
 document.addEventListener("DOMContentLoaded", async function() {
     // const email = document.getElementById("email").value;
 
-    const response = await fetch(url + "movies/fetch", {
+    const response = await fetch(url + "movies?function=fetch", {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

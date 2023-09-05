@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Showtimes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/timeslot_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/browse_movies_timeslot_styles.css') }}">
 </head>
 
-<body class=".wrapper">
+<body class="wrapper">
     <header>
         <nav>
             <div class="logo">Movie Showtimes</div>
@@ -23,7 +23,7 @@
         </nav>
     </header>
 
-    <div class="container"> </div>
+    <div class="container" id="showtimes"> </div>
     
     <script src="{{ url_for('static', filename='JS/timeslot.js') }}"></script>
 </body>

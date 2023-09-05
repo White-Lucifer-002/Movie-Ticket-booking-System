@@ -47,8 +47,9 @@ def homepage():
     return render_template("login.html")
 
 
-@app.route("/register/<function>", methods=["GET","POST"])
-def register(function):
+@app.route("/register", methods=["GET","POST"])
+def register():
+    function = request.args.get("function")
     if function == "registerPage":
         return render_template("register.html")
 
@@ -79,15 +80,16 @@ def register(function):
     return jsonify({"message": "User registered successfully", "code":201}), 201
 
 
-@app.route("/login/<function>", methods=["GET","POST"])
+@app.route("/login", methods=["GET","POST"])
 # @cross_origin(origin='*')
-def login(function):
+def login():
+    if "currentMovie" in session.keys():
+        session.pop("currentMovie")
+
     # Get user data from the request
+    function = request.args.get("function")
     if function == "loginPage":
         return render_template("login.html")
-
-    if "currentMovies" in session.keys():
-        session.pop("currentMovies", None)
 
     data = request.get_json()
     email = data["email"]
@@ -110,32 +112,37 @@ def login(function):
         return jsonify({"message": "Invalid password", "code":401}), 401
 
 
-@app.route("/login/movies/<function>", methods=["GET"])
-def get_movies(function):
+@app.route("/login/movies", methods=["GET"])
+def get_movies():
+    if "currentMovie" in session.keys():
+        session.pop("currentMovie")
+
+    function = request.args.get("function")
     if function == "moviePage":
         return render_template("browsing_movies.html")
-    
-    # if user and user["in_session"]:
-        # Retrieve movies from the database
-    if "currentMovies" in session.keys():
-        session.pop("currentMovies", None)
 
     movies = list(movies_collection.find({}, {"_id": 0}))
     return jsonify({"movies": movies, "user": session.get("user_email")})
-    # else:
-    #     return redirect("login.html")
+
 
 @app.route("/login/movies/timeslot", methods=["GET", "POST"])
 def get_timeslot():
     # Get user data from the request
+    print(session)
+    function = request.args.get("function")
+    if function == "timeslotPage":
+        return render_template("timeslot.html")
+
     if request.method == "POST":
         data = request.get_json()
         session["currentMovie"] = data
         print(session)
-        return render_template("timeslot.html")
+        return data
 
     elif request.method == "GET":
         data = session.get("currentMovie")
+        data["user"] = session.get("user_email")
+        print(data)
         return data
 
 
