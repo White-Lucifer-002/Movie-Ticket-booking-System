@@ -95,6 +95,7 @@ input[type="text"] {
     margin-right: 10px;
 }
 
+/* Buttons animation */
 .search_btn {
     background-color: #0056b3;
     color: white;
@@ -109,6 +110,28 @@ input[type="text"] {
     transition: ease;
     transition-delay: 0.2s;
 }
+
+.proceed-button {
+    position:relative;
+    left: 50%;
+    right: 50%;
+
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 60px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.4s;
+    box-shadow: 0 0 10px rgba(2, 13, 204, 0.3);
+}
+
+.proceed-button:hover {
+    background-color: #2980b9;
+    color:cyan;
+}
+
 
 .user-icon {
     position: relative;
@@ -170,15 +193,31 @@ input[type="text"] {
     transition: 0.4s;
 }
 
-#showtimes {
-    margin-top: 20px;
+.container {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    /* background-color: #f0f0f0; */
 }
 
-.showtime-tile{
-    border: 1px solid #ccc;
+.date-input,
+.time-input {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="date"],
+input[type="text"] {
     padding: 10px;
-    margin: 10px;
-    background-color: #f4f4f4;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
 }
 
 @media (max-width: 768px) {

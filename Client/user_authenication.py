@@ -128,7 +128,7 @@ def get_movies():
 @app.route("/login/movies/timeslot", methods=["GET", "POST"])
 def get_timeslot():
     # Get user data from the request
-    print(session)
+    print("Session cookie:",session)
     function = request.args.get("function")
     if function == "timeslotPage":
         return render_template("timeslot.html")
@@ -136,13 +136,12 @@ def get_timeslot():
     if request.method == "POST":
         data = request.get_json()
         session["currentMovie"] = data
-        print(session)
         return data
 
     elif request.method == "GET":
         data = session.get("currentMovie")
         data["user"] = session.get("user_email")
-        print(data)
+        print("Selected movie data:",data)
         return data
 
 

@@ -7,6 +7,7 @@ function select_seats(selectedMovie, showTime){
 // Function to display showtimes for a selected movie
 function displayShowtimes(selectedMovie) {
     const showtimesContainer = document.getElementById('showtimes');
+    
     console.log("Movie:", selectedMovie)
 
     if (selectedMovie) {
@@ -16,28 +17,45 @@ function displayShowtimes(selectedMovie) {
             <div class="box">
                 <p class="moving-text">${selectedMovie["movieName"]}</p>
             </div>
+            <br>
+            <div class="date-input">
+                <label for="date-input">Select a Date:</label>
+                <input type="date" id="date">
+            </div>
+            <div class="time-input">
+                <label for="time-input">Select a Time:</label>
+                <select id="time">
+                    <!-- Populate time options dynamically using JavaScript -->
+                </select>
+            </div>
         `;
+        
+        const timeSelect = document.getElementById("time");
 
         showtimes.forEach((showtime) => {
-            const showtimeTile = document.createElement("div");
-            showtimeTile.classList.add("showtime-tile");
-            showtime.onclick = function(){
-                select_seats(selectedMovie, showtime);
-            };
+            const option = document.createElement("option");
+            option.value = showtime;
+            option.textContent = showtime;
+            timeSelect.appendChild(option);
 
-            console.log(showtime);
-            showtimeTile.innerHTML = `
-                <p>Date: ${selectedMovie.releaseDate}</p>
-                <p>Time: ${showtime}</p>
-                <p>Theater Name: ${selectedMovie.theatreName}</p>
-                <p>Theater Location: ${selectedMovie.theatreLocation}</p>
-                `
-                showtimesContainer.appendChild(showtimeTile);
+            // showtime.onclick = function(){
+            // select_seats(selectedMovie, showtime);
+            // };
+
+            // console.log(showtime);
+            // showtimeTile.innerHTML = `
+            //     <p>Date: ${selectedMovie.releaseDate}</p>
+            //     <p>Time: ${showtime}</p>
+            //     <p>Theater Name: ${selectedMovie.theatreName}</p>
+            //     <p>Theater Location: ${selectedMovie.theatreLocation}</p>
+            //     `
+            //     showtimesContainer.appendChild(showtimeTile);
         });
     }
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // const dateInput = document.getElementById("date");
     const response = await fetch(url + "movies/timeslot?function=fetch", {
         method: 'GET',
         headers: {
@@ -51,7 +69,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const movie = resp;
 
-    // Populate the movie list on page load
+    // Populate the showtime list on page load
+    // dateInput.addEventListener("change", displayShowtimes);    
     displayShowtimes(movie);
 
     //Loading user details
