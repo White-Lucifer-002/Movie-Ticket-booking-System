@@ -28,7 +28,7 @@ app = Flask("Movie Booking", template_folder="Client/templates/", static_folder=
 app.secret_key = '12345@RAM!'
 cors = CORS(app)
 bcrypt = Bcrypt(app)
-
+app.config["SESSION_COOKIE_SECURE"] = True
 
 #creds for accessing mongo db
 creds_file = open("Client/mongodb_creds.json")
@@ -114,14 +114,11 @@ def get_movies(function):
     if function == "moviePage":
         return render_template("browsing_movies.html")
     
-    # Get user data from the request
-    # user = users_collection.find_one({"email": email})
-
     # if user and user["in_session"]:
         # Retrieve movies from the database
     if "currentMovies" in session.keys():
         session.pop("currentMovies", None)
-        
+
     movies = list(movies_collection.find({}, {"_id": 0}))
     return jsonify({"movies": movies, "user": session.get("user_email")})
     # else:
