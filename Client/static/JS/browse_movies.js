@@ -3,7 +3,6 @@
 let movieData = []
 const url = "http://127.0.0.1:3000/login/"
 
-
 async function slot_timing(movie) {
     const response = await fetch(url + "movies/timeslot", {
         method: 'POST',

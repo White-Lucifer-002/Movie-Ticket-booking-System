@@ -28,7 +28,8 @@ app = Flask("Movie Booking", template_folder="Client/templates/", static_folder=
 app.secret_key = '12345@RAM!'
 cors = CORS(app)
 bcrypt = Bcrypt(app)
-app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["REMEMBER_COOKIE_HTTPONLY "] = True
 
 #creds for accessing mongo db
 creds_file = open("Client/mongodb_creds.json")
@@ -46,7 +47,7 @@ def homepage():
     return render_template("login.html")
 
 
-@app.route("/register/<function>", methods=["POST"])
+@app.route("/register/<function>", methods=["GET","POST"])
 def register(function):
     if function == "registerPage":
         return render_template("register.html")
